@@ -1,0 +1,28 @@
+Area,ID,Time step load [m],Time step renewable [m]
+Austria,1,15,15
+Belgium ,2,15,60
+Bulgaria ,3,60,60
+Croatia ,4,60,60
+Czech Republic,5,60,60
+Denmark ,6,60,60
+Estonia ,7,60,60
+Finland ,8,60,60
+France ,9,60,60
+Germany ,10,15,15
+Greece ,11,60,60
+Hungary ,12,15,15
+Ireland ,13,30,60
+Italy ,14,60,60
+Latvia ,15,60,60
+Lithuania ,16,60,60
+Netherlands ,17,15,15
+Norway,18,60,60
+Poland ,19,60,60
+Portugal ,20,60,60
+Romania ,21,15,15
+Slovakia ,22,60,60
+Slovenia ,23,60,60
+Spain,24,60,60
+Sweden,25,60,60
+Switzerland,26,60,60
+United Kindom,27,30,30
