@@ -6,7 +6,7 @@ from scipy.interpolate import CubicSpline
 import matplotlib.pyplot as plt
 
 
-def preprocess_data(control_time_step, number_hours, PLOT_DATA, STORE_DATA):
+def preprocess_electrical_data(control_time_step, number_hours, PLOT_DATA, STORE_DATA):
     """
     Preprocess electricity load and renewable generation data for multiple areas.
 

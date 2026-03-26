@@ -4,7 +4,7 @@ def compute_weighting_matrices(NUM_STATES, NUM_INPUTS, number_atomic_agents, mod
 
     # Standard cost function
 
-    if Q_cost == []:
+    if state_weighting_matrix == []:
         Q_cost = np.zeros((number_atomic_agents * NUM_STATES, number_atomic_agents * NUM_STATES))
         agent_idx = 0
         for i in range(0,number_atomic_agents):
@@ -15,7 +15,7 @@ def compute_weighting_matrices(NUM_STATES, NUM_INPUTS, number_atomic_agents, mod
     else:
         Q_cost = np.array(state_weighting_matrix)
 
-    if R_cost == []:
+    if input_weighting_matrix == []:
         R_cost = np.zeros((number_atomic_agents * NUM_INPUTS, number_atomic_agents * NUM_INPUTS))
         if model == "linear":
             agent_idx = 0
