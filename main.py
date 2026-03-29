@@ -34,7 +34,7 @@ sys.argv = ["main.py",
             "--model", "linear",
             "--control_strategy", "Centralized_MPC",
             "--partitioning_strategy", "centralized",
-            "--simulation_horizon", "400",
+            "--simulation_horizon", "1440", 
             "--prediction_horizon", "10",
             "--reference_signal_generator", "Standard",
             "--state_weighting_matrix", "[]",
@@ -194,7 +194,7 @@ fig_1, ax_1 = plt.subplots(figsize=(7, 4.5))
 for agent_Idx in range(number_atomic_agents):
     plt.step(simulation_time, x_evolution[agent_Idx*NUM_STATES, :], where='post', label= "Load measurement")
 # plt.step(t_interpolation, forecast_total_load_interp, where='post', color = 'green', linestyle='--', label= "Load forecast")
-ax_1.set_ylabel('Power [GW]')
+ax_1.set_ylabel('Angle [deg]')
 ax_1.set_xlabel(f'Time [s]')
 ax_1.set_title(f'Control simulation -- Angle deviation')
 # ax_1.legend()
