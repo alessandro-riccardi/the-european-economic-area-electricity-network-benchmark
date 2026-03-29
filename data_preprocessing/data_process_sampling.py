@@ -89,6 +89,8 @@ def preprocess_electrical_data(control_time_step, number_hours, PLOT_DATA, STORE
     measured_renewable_increment_dataset = np.zeros((len(t_interpolation)-1, number_areas))
     forecast_renewable_increment_dataset = np.zeros((len(t_interpolation)-1, number_areas))
 
+    initial_dispatchable_power = np.zeros(number_areas) 
+
 
     # %% Process data
 
@@ -198,7 +200,7 @@ def preprocess_electrical_data(control_time_step, number_hours, PLOT_DATA, STORE
         measured_renewable_increment_dataset[:, area_idx] = actual_total_renewable_step
         forecast_renewable_increment_dataset[:, area_idx] = forecast_total_renewable_step
 
-
+        initial_dispatchable_power[area_idx] = np.max([0, measured_load_dataset[0,area_idx] - measured_renewable_dataset[0,area_idx]])
 
 
         if PLOT_DATA:
@@ -298,4 +300,6 @@ def preprocess_electrical_data(control_time_step, number_hours, PLOT_DATA, STORE
         target_path = os.path.normpath(os.path.join(current_folder, '..', 'electricity_data', 'forecast_renewable_increment_dataset.csv'))
         np.savetxt(target_path, forecast_renewable_increment_dataset, delimiter=",", fmt='%g')
 
+        target_path = os.path.normpath(os.path.join(current_folder, '..', 'electricity_data', 'initial_dispatchable_power.csv'))
+        np.savetxt(target_path, initial_dispatchable_power, delimiter=",", fmt='%g')
 

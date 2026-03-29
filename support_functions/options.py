@@ -30,6 +30,9 @@ def parse_arguments():
     parser.add_argument('--prediction_horizon', type=int, default=10,
                          help='Number of time steps to use for the prediction horizon in MPC')  
     
+    parser.add_argument('--reference_signal_generator', type=str, default="Standard",
+                         help='Method to use for generating the reference signal, e.g., "Standard", "Reference_Energy_Exchanges", "Reference_ESS_Charges", etc.')
+
     parser.add_argument('--state_weighting_matrix', type=json.loads, default="[]",
                          help='State weighting matrix for the MPC cost function, provided as a JSON-formatted string representing a 2D list (matrix)')
     

@@ -73,11 +73,13 @@ def compute_topological_data(plot_map, export_map):
     adj_matrix_file_name = "Adj.csv"
     adj_wei_matrix_file_name = "Adj_W.csv"
 
+    current_folder = os.path.dirname(os.path.abspath(__file__))
+
     # %% Import benchmark areas
 
 
 
-    df_areas = pd.read_csv("Data/Benchmark_Areas.csv")
+    df_areas = pd.read_csv(os.path.join(current_folder, "Data/Benchmark_Areas.csv"))
 
     benchmark_areas = {}
 
@@ -92,7 +94,7 @@ def compute_topological_data(plot_map, export_map):
 
     # %% Import complementary benchmark areas
 
-    df_areas_Complementary = pd.read_csv("Data/Benchmark_Areas_Complementary.csv")
+    df_areas_Complementary = pd.read_csv(os.path.join(current_folder, "Data/Benchmark_Areas_Complementary.csv"))
 
     benchmark_areas_Complementary = {}
 
@@ -104,7 +106,7 @@ def compute_topological_data(plot_map, export_map):
     # %% Topological data
 
     # EEA Map
-    gdf_rg = gpd.read_file("Data/NUTS_RG_01M_2021_3035_LEVL_0.json")
+    gdf_rg = gpd.read_file(os.path.join(current_folder, "Data/NUTS_RG_01M_2021_3035_LEVL_0.json"))
     gdf_rg = gdf_rg.sort_values('id')
 
     # Get elements in the benchmark_areas dictionary
@@ -113,7 +115,7 @@ def compute_topological_data(plot_map, export_map):
     eea_areas_rg = eea_areas_rg.sort_values('id')  
 
     # EEA Map
-    gdf_rg_Complementary = gpd.read_file("Data/NUTS_RG_01M_2021_3035_LEVL_0.json")
+    gdf_rg_Complementary = gpd.read_file(os.path.join(current_folder, "Data/NUTS_RG_01M_2021_3035_LEVL_0.json"))
     gdf_rg_Complementary = gdf_rg_Complementary.sort_values('id')
     # Get elements in the Complementary benchmark_areas dictionary
     eea_areas_rg_Complementary = gdf_rg_Complementary[gdf_rg_Complementary.isin(benchmark_areas_Complementary.keys()).id].copy()
@@ -137,7 +139,7 @@ def compute_topological_data(plot_map, export_map):
 
     # %% Adjacency data
 
-    df_adjacency = pd.read_csv("Data/Adjacency_List.csv")
+    df_adjacency = pd.read_csv(os.path.join(current_folder, "Data/Adjacency_List.csv"))
     adjacency_list = df_adjacency.values.tolist()
 
 
@@ -297,9 +299,9 @@ def compute_topological_data(plot_map, export_map):
         
         if export_map == True:
             
-            map_file_name = "figures/EEA-ENB_Topology_Map.png"
+            map_file_name = os.path.join(current_folder, "figures/EEA-ENB_Topology_Map.png")
             fig.savefig(map_file_name, transparent=True, bbox_inches='tight', dpi='figure')
-            map_file_name = "figures/EEA-ENB_Topology_Map.pdf"
+            map_file_name = os.path.join(current_folder, "figures/EEA-ENB_Topology_Map.pdf")
             fig.savefig(map_file_name, transparent=True, bbox_inches='tight', dpi='figure')
 
 # %%
