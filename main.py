@@ -29,12 +29,13 @@ from mpc_core.simulator import control_simulation
 
 sys.argv = ["main.py", 
             # "--electrical_areas", "[17, 2, 6, 10]", # Uncomment this line to simulate a subset of the network, 
-            "--control_time_step", "2.5", 
+            # "--control_time_step", "2.5",
+            "--control_time_step", "0.25",  
             "--number_hours", "24",
             "--model", "linear",
-            "--control_strategy", "Centralized_MPC",
-            "--partitioning_strategy", "centralized",
-            "--simulation_horizon", "1440", 
+            "--control_strategy", "Distributed_MPC",
+            "--partitioning_strategy", "distributed",
+            "--simulation_horizon", "500", 
             "--prediction_horizon", "10",
             "--reference_signal_generator", "Standard",
             "--state_weighting_matrix", "[]",
@@ -82,6 +83,7 @@ prediction_horizon = args.prediction_horizon
 partitioning_strategy = args.partitioning_strategy
 reference_signal_generator = args.reference_signal_generator
 
+
 # %% MARK: Data Preprocessing
 
 # Only required to generate data the first time, or when the control time step changes
@@ -114,7 +116,7 @@ inertia_modifiers = compute_inertia_modifiers(dispatchable_capacities, atomic_ag
 
 # %% MARK: Initialize Network Dynamics
 
-EEA_ENB = network_dynamics_constructor(model, atomic_agents, Weighted_Adjacency_Matrix, control_time_step, inertia_modifiers, compute_initial_state_linear, INITIAL_DISPATCHABLE_POWER)
+EEA_ENB = network_dynamics_constructor(model, atomic_agents, Weighted_Adjacency_Matrix, control_time_step, inertia_modifiers, INITIAL_DISPATCHABLE_POWER)
 
 # %% MARK: Network Partitioning
 

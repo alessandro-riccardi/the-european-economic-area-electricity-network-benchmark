@@ -1,9 +1,10 @@
 import numpy as np
 import math as mt
+from support_functions.state_initializer import compute_initial_state_linear
 
 class LinearNetworkDynamics:
 
-    def __init__(self, atomic_agents, Weighted_Adjacency_Matrix, control_time_step, intertia_modifiers, compute_initial_state_linear, INITIAL_DISPATCHABLE_POWER):
+    def __init__(self, atomic_agents, Weighted_Adjacency_Matrix, control_time_step, intertia_modifiers, INITIAL_DISPATCHABLE_POWER):
 
         self.x = compute_initial_state_linear(atomic_agents, INITIAL_DISPATCHABLE_POWER)
 
@@ -77,5 +78,8 @@ class LinearNetworkDynamics:
         x_plus = self.A_Dynamics @ self.x + self.B_Dynamics @ u
         self.x = x_plus
         return self.x
+    
+    def set_system_state(self, x_k):
+        self.x = x_k
     
 

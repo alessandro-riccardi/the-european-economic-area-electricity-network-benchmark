@@ -1,9 +1,10 @@
 import numpy as np
 import math as mt
+from support_functions.state_initializer import compute_initial_state_linear
 
 class LinearNetworkDynamics:
 
-    def __init__(self, atomic_agents, Weighted_Adjacency_Matrix, control_time_step, intertia_modifiers, compute_initial_state_linear, INITIAL_DISPATCHABLE_POWER):
+    def __init__(self, atomic_agents, Weighted_Adjacency_Matrix, control_time_step, intertia_modifiers, INITIAL_DISPATCHABLE_POWER):
 
         self.x = compute_initial_state_linear(atomic_agents, INITIAL_DISPATCHABLE_POWER)
 
@@ -81,10 +82,10 @@ class LinearNetworkDynamics:
 
 
 
-def network_dynamics_constructor(model, atomic_agents, Weighted_Adjacency_Matrix, control_time_step, inertia_modifiers, compute_initial_state_linear, INITIAL_DISPATCHABLE_POWER):
+def network_dynamics_constructor(model, atomic_agents, Weighted_Adjacency_Matrix, control_time_step, inertia_modifiers, INITIAL_DISPATCHABLE_POWER):
     
     if model == 'linear':
-        return LinearNetworkDynamics(atomic_agents, Weighted_Adjacency_Matrix, control_time_step, inertia_modifiers, compute_initial_state_linear, INITIAL_DISPATCHABLE_POWER)
+        return LinearNetworkDynamics(atomic_agents, Weighted_Adjacency_Matrix, control_time_step, inertia_modifiers, INITIAL_DISPATCHABLE_POWER)
     else:
         # Here add the hybrid model constructor when the class is implemented
         raise ValueError(f"Model '{model}' not recognized. Please choose 'linear'.")
