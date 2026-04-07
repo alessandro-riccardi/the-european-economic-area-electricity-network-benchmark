@@ -13,8 +13,7 @@ from support_functions.inertia_modifiers import compute_inertia_modifiers
 from mpc_core.network_dynamics import network_dynamics_constructor
 from support_functions.state_initializer import compute_initial_state_linear
 from partitioning.partitioning_caller import network_partitioning
-from partitioning.control_agents import compute_control_agents_matrices, compute_control_agents_matrices
-from mpc_core.optimization_matrices import compute_optimization_matrices
+from partitioning.control_agents import compute_control_agents_matrices
 from mpc_core.reference_generator import compute_reference_trajectory
 from mpc_core.simulator import control_simulation
 
@@ -35,7 +34,7 @@ sys.argv = ["main.py",
             "--model", "linear",
             "--control_strategy", "Distributed_MPC",
             "--partitioning_strategy", "distributed",
-            "--simulation_horizon", "500", 
+            "--simulation_horizon", "100", 
             "--prediction_horizon", "10",
             "--reference_signal_generator", "Standard",
             "--state_weighting_matrix", "[]",
@@ -120,17 +119,12 @@ EEA_ENB = network_dynamics_constructor(model, atomic_agents, Weighted_Adjacency_
 
 # %% MARK: Network Partitioning
 
-# here add model
 Control_Agents, Augmented_Control_Agents = network_partitioning(atomic_agents, partitioning_strategy, Weighted_Adjacency_Matrix)
 
 # %% MARK: Augmented control agents dynamics
 
 Control_Agents_Matrices = compute_control_agents_matrices(model, atomic_agents, Control_Agents, Augmented_Control_Agents, EEA_ENB, Q_cost, R_cost)
 
-
-# %% MARK: Compute Optimization Matrices
-
-Control_Agents_Optimization_Matrices = compute_optimization_matrices(model, Control_Agents, Augmented_Control_Agents, Control_Agents_Matrices, prediction_horizon, EEA_ENB)
 
 # %% MARK: Compute Reference Trajectory
 
@@ -171,7 +165,6 @@ simulation_data = {
     "Control_Agents": Control_Agents,
     "Augmented_Control_Agents": Augmented_Control_Agents,
     "Control_Agents_Matrices": Control_Agents_Matrices,
-    "Control_Agents_Optimization_Matrices": Control_Agents_Optimization_Matrices,
     "Reference_Signal": Reference_Signal,
 }
 
@@ -179,7 +172,7 @@ simulation_data = {
 
 # %% MARK: Control Simulation
 
-x_evolution, u_evolution, w_evolution = control_simulation(simulation_data) 
+x_evolution, u_evolution, w_evolution, residual_evolution, Core_Seconds, Simulation_Total_Time = control_simulation(simulation_data) 
 
 
 # %% MARK: Plot and Store Results

@@ -3,10 +3,12 @@ import gurobipy as gp
 import time as tm
 from support_functions.empty_lists import create_empty_list
 from support_functions.empty_lists import create_empty_list_2D
+from mpc_core.optimization_matrices import compute_optimization_matrices
 
 
 def control_simulation_linear_distributed_mpc(simulation_data):
 
+    model = simulation_data["model"]
 
     LIST_ATOMIC_AGENTS = simulation_data["atomic_agents"]
     Control_Agents = simulation_data["Control_Agents"]
@@ -20,8 +22,10 @@ def control_simulation_linear_distributed_mpc(simulation_data):
     SIMULATION_HORIZON = simulation_data["simulation_horizon"]
     PREDICTION_HORIZON = simulation_data["prediction_horizon"]
 
+    EEA_ENB = simulation_data["EEA_ENB"]
+
     Control_Agents_Matrices = simulation_data["Control_Agents_Matrices"]
-    Control_Agents_Optimization_Matrices = simulation_data["Control_Agents_Optimization_Matrices"]
+    Control_Agents_Optimization_Matrices = compute_optimization_matrices(model, Control_Agents, Augmented_Control_Agents, Control_Agents_Matrices, PREDICTION_HORIZON, EEA_ENB)
     Reference_Signal = simulation_data["Reference_Signal"]
 
     LOWER_BOUNDS_INPUT = simulation_data["lower_bounds_inputs"]
@@ -37,7 +41,6 @@ def control_simulation_linear_distributed_mpc(simulation_data):
 
     INITIAL_DISPATCHABLE_POWER = simulation_data["INITIAL_DISPATCHABLE_POWER"]
 
-    EEA_ENB = simulation_data["EEA_ENB"]
 
     
     # Preallocation of variables
@@ -119,6 +122,8 @@ def control_simulation_linear_distributed_mpc(simulation_data):
         consensus_variable[l] = np.zeros(((NUM_STATES+NUM_INPUTS)*number_of_agents_l*PREDICTION_HORIZON,1))
         gamma[l] = np.zeros(((NUM_STATES+NUM_INPUTS)*number_of_agents_l*PREDICTION_HORIZON,1))
 
+
+    
     Simulation_Start_Time_Holder = tm.time()
     Simulation_Timer_Start = tm.time()
     # Simulation 
@@ -703,8 +708,11 @@ def control_simulation_linear_distributed_mpc(simulation_data):
         # x_evolution[:,k+1] =  A_Dynamics @ x_evolution[:,k] + B_Dynamics @ u_evolution[:,k] + D_Dynamics @ w_evolution[:,k]
         # DIFFERENCE BETWEEN MEASURED AND FORECAST
         # w_evolution[:,k+1] = w_measured[:,k+1].copy()
+    
+
+    
     Simulation_Total_Time = tm.time() - Simulation_Start_Time_Holder
     print("Simulation = ", Simulation_Total_Time, " [s]")
 
     # return x_evolution, u_evolution, w_evolution, residual_evolution, Core_Seconds
-    return x_evolution, u_evolution, w_evolution
+    return x_evolution, u_evolution, w_evolution, residual_evolution, Core_Seconds, Simulation_Total_Time

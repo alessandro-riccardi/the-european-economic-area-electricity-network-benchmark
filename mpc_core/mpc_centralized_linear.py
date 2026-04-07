@@ -2,11 +2,12 @@ import numpy as np
 import gurobipy as gp
 import time as tm
 from support_functions.empty_lists import create_empty_list
+from mpc_core.optimization_matrices import compute_optimization_matrices
 
-# WHERE DO I GET OR INTRODUCE THE INITIAL DISPATCHABLE POWER? INITIAL STATE IS NOT SET UP
-# CHECK THIS CAUSE IT IS CREATING SPIKE AT THE BEGINNING OF TEH SIMULATION
 
 def control_simulation_linear_centralized_mpc(simulation_data):
+
+    model = simulation_data["model"]
 
     LIST_ATOMIC_AGENTS = simulation_data["atomic_agents"]
     Control_Agents = simulation_data["Control_Agents"]
@@ -20,8 +21,11 @@ def control_simulation_linear_centralized_mpc(simulation_data):
     SIMULATION_HORIZON = simulation_data["simulation_horizon"]
     PREDICTION_HORIZON = simulation_data["prediction_horizon"]
 
+    EEA_ENB = simulation_data["EEA_ENB"]
+
     Control_Agents_Matrices = simulation_data["Control_Agents_Matrices"]
-    Control_Agents_Optimization_Matrices = simulation_data["Control_Agents_Optimization_Matrices"]
+    Control_Agents_Optimization_Matrices = compute_optimization_matrices(model, Control_Agents, Augmented_Control_Agents, Control_Agents_Matrices, PREDICTION_HORIZON, EEA_ENB)
+
     Reference_Signal = simulation_data["Reference_Signal"]
 
     LOWER_BOUNDS_INPUT = simulation_data["lower_bounds_inputs"]
@@ -35,7 +39,7 @@ def control_simulation_linear_centralized_mpc(simulation_data):
     FORECAST_LOAD_INCREMENTS = simulation_data["FORECAST_LOAD_INCREMENTS"]
     FORECAST_RENEWABLE_INCREMENTS = simulation_data["FORECAST_RENEWABLE_INCREMENTS"]
 
-    EEA_ENB = simulation_data["EEA_ENB"]
+    
 
     x_evolution = np.zeros((NUM_STATES*NUMBER_ATOMIC_AGENTS,SIMULATION_HORIZON+1))
     u_evolution = np.zeros((NUM_INPUTS*NUMBER_ATOMIC_AGENTS,SIMULATION_HORIZON+1))
@@ -67,6 +71,7 @@ def control_simulation_linear_centralized_mpc(simulation_data):
     Simulation_Timer_Start = tm.time()
     # Simulation 
 
+    
     for k in range(0,SIMULATION_HORIZON):
         
         print("TIME STEP ", k)
@@ -168,7 +173,7 @@ def control_simulation_linear_centralized_mpc(simulation_data):
 
         # Optimization Options
         gurobi_model.setObjective(Stage_Cost, gp.GRB.MINIMIZE) 
-        gurobi_model.Params.LogToConsole = 0
+        gurobi_model.Params.OutputFlag = 0
         # gurobi_model.Params.FeasibilityTol = 1e-9
         # gurobi_model.Params.NumericFocus = 1
         
@@ -197,4 +202,6 @@ def control_simulation_linear_centralized_mpc(simulation_data):
     Simulation_Total_Time = tm.time() - Simulation_Start_Time_Holder
     print("Simulation = ", Simulation_Total_Time, " [s]")
 
-    return x_evolution, u_evolution, w_evolution
+    residual_evolution = "None"
+
+    return x_evolution, u_evolution, w_evolution, x_evolution, u_evolution, w_evolution, residual_evolution, Core_Seconds, Simulation_Total_Time
